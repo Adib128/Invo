@@ -6,12 +6,10 @@ use App\Http\Requests\CustomerRequest;
 use App\Models\Customer;
 use App\Http\Resources\CustomerResource;
 
-class CustomerController extends Controller
+class CustomerController extends BaseController
 {
     /**
-     * Display a listing of customers.
-     *
-     * @return \Illuminate\Http\Response
+     * Display a paginated list of customers.
      */
     public function index()
     {
@@ -21,62 +19,54 @@ class CustomerController extends Controller
 
     /**
      * Store a newly created customer in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(CustomerRequest $request)
     {
         $customer = Customer::create($request->all());
-        return response()->json(new CustomerResource($customer), 201);
+        return $this->handleResponse(new CustomerResource($customer),
+            'Customer created successfully',
+            201
+        );
     }
 
     /**
      * Display the specified customer.
-     *
-     * @param  \App\Models\Customer  $customer
-     * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
         $customer = Customer::find($id);
-        if(!($customer)){
-            return response()->json(['message' => 'Customer not found'],404); 
+        if (!$customer) {
+            return $this->handleError('Customer not found');
         }
-        return response()->json(new CustomerResource($customer));
+        return $this->handleResponse(new CustomerResource($customer));
     }
 
     /**
      * Update the specified customer in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Customer  $customer
-     * @return \Illuminate\Http\Response
      */
     public function update(CustomerRequest $request, $id)
     {
         $customer = Customer::find($id);
-        if(!($customer)){
-            return response()->json(['message' => 'Customer not found'],404); 
+        if (!$customer) {
+            return $this->handleError('Customer not found');
         }
         $input = $request->all();
         $customer->fill($input)->save();
-        return response()->json(new CustomerResource($customer));
+        return $this->handleResponse(new CustomerResource($customer),
+            'Customer updated successfully'
+        );
     }
 
     /**
      * Remove the specified customer from storage.
-     *
-     * @param  \App\Models\Customer  $customer
-     * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         $customer = Customer::find($id);
-        if(!($customer)){
-            return response()->json(['message' => 'Customer not found'],404); 
+        if (!$customer) {
+            return $this->handleError('Customer not found');
         }
         $customer->delete();
-        return response()->json(['message' => 'Customer deleted successfully']);
+        return $this->handleResponse([],'Customer deleted successfully');
     }
 }

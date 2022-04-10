@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,3 +21,4 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::get('/profile', [AuthController::class, 'profile'])->middleware('auth:api');
 
 Route::apiResource('/customers', CustomerController::class)->middleware('auth:api');
+Route::apiResource('/products', ProductController::class)->middleware('auth:api');

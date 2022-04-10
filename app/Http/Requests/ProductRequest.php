@@ -2,11 +2,11 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Customer;
+use App\Models\Product;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class CustomerRequest extends FormRequest
+class ProductRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,19 +25,17 @@ class CustomerRequest extends FormRequest
      */
     public function rules()
     {
-        // Rules for create method
-        $rules =  [
+        $rules = [
+            'code' => 'required|unique:products',
             'name' => 'required',
-            'email' => 'required|email|unique:customers',
-            'phoneNumber' => 'required|unique:customers',
-            'address' => 'required'
+            'price' => 'required|numeric',
+            'brand' =>  'required',
+            'unit' => 'required'
         ];
 
-        // Rules for update method
         if (in_array($this->method(), ['PUT', 'PATCH'])) {
-            $customer = Customer::find($this->route()->parameter('customer'));
-            $rules['email'] = ['required',Rule::unique('customers')->ignore($customer)];
-            $rules['phoneNumber'] = ['required',Rule::unique('customers')->ignore($customer)];
+            $product = Product::find($this->route()->parameter('product'));
+            $rules['code'] = ['required',Rule::unique('products')->ignore($product)];
         } 
 
         return $rules;

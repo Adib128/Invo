@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class InvoiceResource extends JsonResource
@@ -17,12 +18,13 @@ class InvoiceResource extends JsonResource
         return [
             'id' => $this->id,
             'reference' => $this->reference,
-            'dueDate' => $this->dueDate,
+            'dueDate' => Carbon::parse($this->dueDate)->format('m-d-Y'),
             'subTotal' => $this->subTotal,
             'tax' => $this->tax,
             'discount' => $this->discount,
             'total' => $this->total,
-            'customer' => $this->customer,
+            'created_at' => $this->created_at->format('d/m/Y H:i:s'),
+            'customer' => new CustomerResource($this->customer),
         ];
     }
 }

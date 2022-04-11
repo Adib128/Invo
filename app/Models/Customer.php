@@ -15,4 +15,8 @@ class Customer extends Model
         'city',
         'address'
     ];
+
+    public function invoices(){
+        return $this->hasMany(Invoice::class);
+    }
 }

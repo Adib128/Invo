@@ -23,7 +23,6 @@ class InvoiceResource extends JsonResource
             'tax' => $this->tax,
             'discount' => $this->discount,
             'total' => $this->total,
-            'created_at' => $this->created_at->format('d/m/Y H:i:s'),
             'customer' => new CustomerResource($this->customer),
         ];
     }

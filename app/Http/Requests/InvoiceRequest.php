@@ -2,13 +2,11 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Product;
-use Illuminate\Contracts\Validation\Validator;
+use App\Models\Invoice;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Illuminate\Http\Exceptions\HttpResponseException;
 
-class ProductRequest extends FormRequest
+class InvoiceRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,21 +26,23 @@ class ProductRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'code' => 'required|unique:products',
-            'name' => 'required',
-            'price' => 'required|numeric',
-            'brand' => 'required',
-            'unit' => 'required',
+            'reference' => 'required|unique:invoices',
+            'dueDate' => 'required|date',
+            'subTotal' => 'required|integer',
+            'tax' => 'required|integer',
+            'discount' => 'required|integer',
+            'total' => 'required|integer',
+            'customer_id' => 'required|exists:customers,id',
         ];
 
         if (in_array($this->method(), ['PUT'])) {
-            $product = Product::find($this->route()->parameter('product'));
-            $rules['code'] = [
+            $invoice = Invoice::find($this->route()->parameter('invoice'));
+            $rules['reference'] = [
                 'required',
-                Rule::unique('products')->ignore($product),
+                Rule::unique('invoices')->ignore($invoice),
             ];
         }
-
+        
         return $rules;
     }
 }

@@ -34,7 +34,7 @@ class CustomerRequest extends FormRequest
         ];
 
         // Rules for update method
-        if (in_array($this->method(), ['PUT', 'PATCH'])) {
+        if (in_array($this->method(), ['PUT'])) {
             $customer = Customer::find($this->route()->parameter('customer'));
             $rules['email'] = ['required',Rule::unique('customers')->ignore($customer)];
             $rules['phoneNumber'] = ['required',Rule::unique('customers')->ignore($customer)];

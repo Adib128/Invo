@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\InvoiceRequest;
 use App\Http\Resources\InvoiceResource;
 use App\Models\Invoice;
 use Illuminate\Http\Request;
@@ -25,9 +26,14 @@ class InvoiceController extends BaseController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(InvoiceRequest $request)
     {
-        //
+        $invoice = Invoice::create($request->all());
+        return $this->handleResponse(
+            new InvoiceResource($invoice),
+            'Invoice created successfully',
+            201
+        );
     }
 
     /**
@@ -51,7 +57,14 @@ class InvoiceController extends BaseController
      */
     public function update(Request $request, $id)
     {
-        //
+        $invoice = Invoice::find($id);
+        if (!$invoice) {
+            return $this->handleError('Invoice not found');
+        }
+        $invoice->fill($request->all())->save();
+        return $this->handleResponse(new InvoiceResource($invoice),
+            'Invoice updated successfully'
+        );
     }
 
     /**
@@ -62,6 +75,11 @@ class InvoiceController extends BaseController
      */
     public function destroy($id)
     {
-        //
+        $invoice = Invoice::find($id);
+        if (!$invoice) {
+            return $this->handleError('Invoice not found');
+        }
+        $invoice->delete();
+        return $this->handleResponse([], 'Invoice deleted successfully');
     }
 }

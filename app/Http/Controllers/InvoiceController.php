@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\InvoiceRequest;
 use App\Http\Resources\InvoiceResource;
 use App\Models\Invoice;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class InvoiceController extends BaseController
@@ -29,6 +30,7 @@ class InvoiceController extends BaseController
     public function store(InvoiceRequest $request)
     {
         $invoice = Invoice::create($request->all());
+        $invoice->products()->attach($request->products);
         return $this->handleResponse(
             new InvoiceResource($invoice),
             'Invoice created successfully',
@@ -62,7 +64,8 @@ class InvoiceController extends BaseController
             return $this->handleError('Invoice not found');
         }
         $invoice->fill($request->all())->save();
-        return $this->handleResponse(new InvoiceResource($invoice),
+        return $this->handleResponse(
+            new InvoiceResource($invoice),
             'Invoice updated successfully'
         );
     }
@@ -81,5 +84,43 @@ class InvoiceController extends BaseController
         }
         $invoice->delete();
         return $this->handleResponse([], 'Invoice deleted successfully');
+    }
+
+    /**
+     * add products to invoice.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function addProducts(Request $request, $id)
+    {
+        $invoice = Invoice::find($id);
+        // Select the list of sent and non existing products
+        $attachedProducts = $invoice
+            ->products()
+            ->whereIn('products.id', $request->products)
+            ->pluck('products.id')
+            ->toArray();
+        // Compare the tow arrays to get just the list of non existing products
+        $newProducts = array_diff($request->products, $attachedProducts);
+        // Attach new and non existing products
+        $invoice->products()->attach($newProducts);
+        return $this->handleResponse(new InvoiceResource($invoice));
+    }
+
+    /**
+     * Remove products from invoice.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function removeProducts(Request $request, $id)
+    {
+        $invoice = Invoice::find($id);
+        $products = $request->products;
+        $invoice->products()->detach($products);
+        return $this->handleResponse(new InvoiceResource($invoice));
     }
 }

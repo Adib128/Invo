@@ -22,5 +22,10 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::get('/profile', [AuthController::class, 'profile'])->middleware('auth:api');
 
 Route::apiResource('/customers', CustomerController::class)->middleware('auth:api');
+
 Route::apiResource('/products', ProductController::class)->middleware('auth:api');
+
 Route::apiResource('/invoices', InvoiceController::class)->middleware('auth:api');
+
+Route::post('/invoices/{id}/products', [InvoiceController::class, 'addProducts'])->middleware('auth:api');
+Route::delete('/invoices/{id}/products', [InvoiceController::class, 'removeProducts'])->middleware('auth:api');

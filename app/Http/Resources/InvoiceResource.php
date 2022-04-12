@@ -23,6 +23,7 @@ class InvoiceResource extends JsonResource
             'tax' => $this->tax,
             'discount' => $this->discount,
             'total' => $this->total,
+            'products' => ProductResource::collection($this->products),
             'customer' => new CustomerResource($this->customer),
         ];
     }

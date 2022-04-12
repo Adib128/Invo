@@ -11,8 +11,11 @@ class Invoice extends Model
     use HasFactory, SoftDeletes;
     protected $guarded = ['id'];
 
-    public function customer()
-    {
+    public function customer(){
         return $this->belongsTo(Customer::class);
+    }
+
+    public function products(){
+        return $this->belongsToMany(Product::class);
     }
 }

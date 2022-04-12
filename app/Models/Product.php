@@ -17,4 +17,8 @@ class Product extends Model
         'brand',
         'unit',
     ];
+
+    public function invoices(){
+        return $this->belongsToMany(Invoice::class);
+    }
 }

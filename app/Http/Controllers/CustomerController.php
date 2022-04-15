@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CustomerRequest;
 use App\Models\Customer;
 use App\Http\Resources\CustomerResource;
-use Illuminate\Support\Facades\DB;
 
 class CustomerController extends BaseController
 {

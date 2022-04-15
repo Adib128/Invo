@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\InvoiceRequest;
 use App\Http\Resources\InvoiceResource;
 use App\Models\Invoice;
-use App\Models\Product;
 use Illuminate\Http\Request;
 
 class InvoiceController extends BaseController

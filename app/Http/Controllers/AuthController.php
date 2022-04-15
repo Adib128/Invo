@@ -30,7 +30,7 @@ class AuthController extends BaseController
             'password' => 'required'
         ]);
         if (!auth()->attempt($loginData)) {
-            return $this->handleError('Invalid Credentials');
+            return $this->handleError('Invalid Credentials', 401);
         }
         $accessToken = auth()
             ->user()

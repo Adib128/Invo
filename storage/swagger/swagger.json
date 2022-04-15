@@ -1,0 +1,1245 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Laravel",
+        "description": "Documentation for the Application API",
+        "version": "1.0.0"
+    },
+    "basePath": "/api",
+    "servers": [
+        {
+            "url": "http://localhost/api",
+            "description": "Laravel Server #1"
+        }
+    ],
+    "paths": {
+        "-docs": {
+            "get": {
+                "summary": "",
+                "description": "",
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "(Unauthorized) Invalid or missing Access Token"
+                    }
+                },
+                "tags": [
+                    "-docs"
+                ]
+            }
+        },
+        "/documentation": {
+            "get": {
+                "summary": "Display Swagger API page.",
+                "description": "",
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "(Unauthorized) Invalid or missing Access Token"
+                    }
+                },
+                "tags": [
+                    "documentation"
+                ]
+            }
+        },
+        "/oauth2-callback": {
+            "get": {
+                "summary": "Display Oauth2 callback pages.",
+                "description": "",
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "(Unauthorized) Invalid or missing Access Token"
+                    }
+                },
+                "tags": [
+                    "oauth2-callback"
+                ]
+            }
+        },
+        "/login": {
+            "post": {
+                "summary": "",
+                "description": "",
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "(Unauthorized) Invalid or missing Access Token"
+                    }
+                },
+                "tags": [
+                    "login"
+                ]
+            }
+        },
+        "/register": {
+            "post": {
+                "summary": "",
+                "description": "",
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "(Unauthorized) Invalid or missing Access Token"
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "maxLength": 55
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "register"
+                ]
+            }
+        },
+        "/profile": {
+            "get": {
+                "summary": "",
+                "description": "",
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "(Unauthorized) Invalid or missing Access Token"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "profile"
+                ]
+            }
+        },
+        "/customers": {
+            "get": {
+                "summary": "Display a paginated list of customers.",
+                "description": "",
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "current_page",
+                                        "data",
+                                        "first_page_url",
+                                        "last_page",
+                                        "last_page_url",
+                                        "path",
+                                        "per_page",
+                                        "total"
+                                    ],
+                                    "properties": {
+                                        "current_page": {
+                                            "type": "integer",
+                                            "example": 2
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "$ref": "Post"
+                                            }
+                                        },
+                                        "first_page_url": {
+                                            "type": "string",
+                                            "example": "http://localhost/api/customers?page=1"
+                                        },
+                                        "from": {
+                                            "type": "integer",
+                                            "example": 16
+                                        },
+                                        "last_page": {
+                                            "type": "integer",
+                                            "example": 10
+                                        },
+                                        "last_page_url": {
+                                            "type": "string",
+                                            "example": "http://localhost/api/customers?page=10"
+                                        },
+                                        "next_page_url": {
+                                            "type": "string",
+                                            "example": "http://localhost/api/customers?page=3"
+                                        },
+                                        "path": {
+                                            "type": "string",
+                                            "example": "http://localhost/api/customers"
+                                        },
+                                        "per_page": {
+                                            "type": "integer",
+                                            "example": 15
+                                        },
+                                        "prev_page_url": {
+                                            "type": "string",
+                                            "example": "http://localhost/api/customers?page=1"
+                                        },
+                                        "to": {
+                                            "type": "integer",
+                                            "example": 30
+                                        },
+                                        "total": {
+                                            "type": "integer",
+                                            "example": 150
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "(Unauthorized) Invalid or missing Access Token"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "customers"
+                ]
+            },
+            "post": {
+                "summary": "Store a newly created customer in storage.",
+                "description": "",
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "(Unauthorized) Invalid or missing Access Token"
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "phoneNumber",
+                                    "address"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "phoneNumber": {
+                                        "type": "string"
+                                    },
+                                    "address": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "customers"
+                ]
+            }
+        },
+        "/customers/{customer}": {
+            "get": {
+                "summary": "Display the specified customer.",
+                "description": "",
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "Post"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "(Unauthorized) Invalid or missing Access Token"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "customer",
+                        "in": "path",
+                        "required": true,
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "customers"
+                ]
+            },
+            "put": {
+                "summary": "Update the specified customer in storage.",
+                "description": "",
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "(Unauthorized) Invalid or missing Access Token"
+                    }
+                },
+                "requestBody": {
+                    "0": {
+                        "name": "customer",
+                        "in": "path",
+                        "required": true,
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "phoneNumber",
+                                    "address"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "phoneNumber": {
+                                        "type": "string"
+                                    },
+                                    "address": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "customers"
+                ]
+            },
+            "patch": {
+                "summary": "Update the specified customer in storage.",
+                "description": "",
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "(Unauthorized) Invalid or missing Access Token"
+                    }
+                },
+                "requestBody": {
+                    "0": {
+                        "name": "customer",
+                        "in": "path",
+                        "required": true,
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "phoneNumber",
+                                    "address"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "phoneNumber": {
+                                        "type": "string"
+                                    },
+                                    "address": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "customers"
+                ]
+            },
+            "delete": {
+                "summary": "Remove the specified customer from storage.",
+                "description": "",
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "(Unauthorized) Invalid or missing Access Token"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "customer",
+                        "in": "path",
+                        "required": true,
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "customers"
+                ]
+            }
+        },
+        "/products": {
+            "get": {
+                "summary": "Display a listing of the products.",
+                "description": "",
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "(Unauthorized) Invalid or missing Access Token"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "products"
+                ]
+            },
+            "post": {
+                "summary": "Store a newly created product in storage.",
+                "description": "",
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "(Unauthorized) Invalid or missing Access Token"
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "code",
+                                    "name",
+                                    "price",
+                                    "brand",
+                                    "unit"
+                                ],
+                                "properties": {
+                                    "code": {
+                                        "type": "string"
+                                    },
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "price": {
+                                        "type": "number"
+                                    },
+                                    "brand": {
+                                        "type": "string"
+                                    },
+                                    "unit": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "products"
+                ]
+            }
+        },
+        "/products/{product}": {
+            "get": {
+                "summary": "Display the specified product.",
+                "description": "",
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "(Unauthorized) Invalid or missing Access Token"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "product",
+                        "in": "path",
+                        "required": true,
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "products"
+                ]
+            },
+            "put": {
+                "summary": "Update the specified resource in product.",
+                "description": "",
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "(Unauthorized) Invalid or missing Access Token"
+                    }
+                },
+                "requestBody": {
+                    "0": {
+                        "name": "product",
+                        "in": "path",
+                        "required": true,
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "code",
+                                    "name",
+                                    "price",
+                                    "brand",
+                                    "unit"
+                                ],
+                                "properties": {
+                                    "code": {
+                                        "type": "string"
+                                    },
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "price": {
+                                        "type": "number"
+                                    },
+                                    "brand": {
+                                        "type": "string"
+                                    },
+                                    "unit": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "products"
+                ]
+            },
+            "patch": {
+                "summary": "Update the specified resource in product.",
+                "description": "",
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "(Unauthorized) Invalid or missing Access Token"
+                    }
+                },
+                "requestBody": {
+                    "0": {
+                        "name": "product",
+                        "in": "path",
+                        "required": true,
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "code",
+                                    "name",
+                                    "price",
+                                    "brand",
+                                    "unit"
+                                ],
+                                "properties": {
+                                    "code": {
+                                        "type": "string"
+                                    },
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "price": {
+                                        "type": "number"
+                                    },
+                                    "brand": {
+                                        "type": "string"
+                                    },
+                                    "unit": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "products"
+                ]
+            },
+            "delete": {
+                "summary": "Remove the specified product from storage.",
+                "description": "",
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "(Unauthorized) Invalid or missing Access Token"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "product",
+                        "in": "path",
+                        "required": true,
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "products"
+                ]
+            }
+        },
+        "/invoices": {
+            "get": {
+                "summary": "Display a listing of the invoices.",
+                "description": "",
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "(Unauthorized) Invalid or missing Access Token"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "invoices"
+                ]
+            },
+            "post": {
+                "summary": "Store a newly created invoice in storage.",
+                "description": "",
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "(Unauthorized) Invalid or missing Access Token"
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "reference",
+                                    "dueDate",
+                                    "subTotal",
+                                    "tax",
+                                    "discount",
+                                    "total",
+                                    "customer_id"
+                                ],
+                                "properties": {
+                                    "reference": {
+                                        "type": "string"
+                                    },
+                                    "dueDate": {
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "subTotal": {
+                                        "type": "integer"
+                                    },
+                                    "tax": {
+                                        "type": "integer"
+                                    },
+                                    "discount": {
+                                        "type": "integer"
+                                    },
+                                    "total": {
+                                        "type": "integer"
+                                    },
+                                    "customer_id": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "invoices"
+                ]
+            }
+        },
+        "/invoices/{invoice}": {
+            "get": {
+                "summary": "Display the specified invoice.",
+                "description": "",
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "(Unauthorized) Invalid or missing Access Token"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "invoice",
+                        "in": "path",
+                        "required": true,
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "invoices"
+                ]
+            },
+            "put": {
+                "summary": "Update the specified invoice in storage.",
+                "description": "",
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "(Unauthorized) Invalid or missing Access Token"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "invoice",
+                        "in": "path",
+                        "required": true,
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "invoices"
+                ]
+            },
+            "patch": {
+                "summary": "Update the specified invoice in storage.",
+                "description": "",
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "(Unauthorized) Invalid or missing Access Token"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "invoice",
+                        "in": "path",
+                        "required": true,
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "invoices"
+                ]
+            },
+            "delete": {
+                "summary": "Remove the specified invoice from storage.",
+                "description": "",
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "(Unauthorized) Invalid or missing Access Token"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "invoice",
+                        "in": "path",
+                        "required": true,
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "invoices"
+                ]
+            }
+        },
+        "/invoices/{id}/products": {
+            "post": {
+                "summary": "add products to invoice.",
+                "description": "",
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "(Unauthorized) Invalid or missing Access Token"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "invoices"
+                ]
+            },
+            "delete": {
+                "summary": "Remove products from invoice.",
+                "description": "",
+                "deprecated": false,
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "(Unauthorized) Invalid or missing Access Token"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "invoices"
+                ]
+            }
+        }
+    },
+    "tags": [],
+    "components": {
+        "schemas": {
+            "Customer": {
+                "type": "object",
+                "required": [
+                    "id",
+                    "name",
+                    "email",
+                    "phoneNumber",
+                    "city",
+                    "address"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "bigint",
+                        "example": 3877052277643185901
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "string"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "string"
+                    },
+                    "phoneNumber": {
+                        "type": "integer",
+                        "example": 1859340767
+                    },
+                    "city": {
+                        "type": "string",
+                        "example": "string"
+                    },
+                    "address": {
+                        "type": "string",
+                        "example": "string"
+                    },
+                    "created_at": {
+                        "type": "datetime",
+                        "example": "2022-04-13 12:44:43"
+                    },
+                    "updated_at": {
+                        "type": "datetime",
+                        "example": "2022-04-13 12:44:43"
+                    },
+                    "deleted_at": {
+                        "type": "datetime",
+                        "example": "2022-04-13 12:44:43"
+                    }
+                }
+            },
+            "Invoice": {
+                "type": "object",
+                "required": [
+                    "id",
+                    "reference",
+                    "dueDate",
+                    "subTotal",
+                    "tax",
+                    "discount",
+                    "total",
+                    "customer_id"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "bigint",
+                        "example": 2213981972825229804
+                    },
+                    "reference": {
+                        "type": "integer",
+                        "example": 1578441900
+                    },
+                    "dueDate": {
+                        "type": "date",
+                        "example": "2022-04-13"
+                    },
+                    "subTotal": {
+                        "type": "float",
+                        "example": 0.5
+                    },
+                    "tax": {
+                        "type": "float",
+                        "example": 0.5
+                    },
+                    "discount": {
+                        "type": "integer",
+                        "example": 1564314092
+                    },
+                    "total": {
+                        "type": "float",
+                        "example": 0.5
+                    },
+                    "customer_id": {
+                        "type": "bigint",
+                        "example": 7342370999457553119
+                    },
+                    "deleted_at": {
+                        "type": "datetime",
+                        "example": "2022-04-13 12:44:43"
+                    },
+                    "created_at": {
+                        "type": "datetime",
+                        "example": "2022-04-13 12:44:43"
+                    },
+                    "updated_at": {
+                        "type": "datetime",
+                        "example": "2022-04-13 12:44:43"
+                    }
+                }
+            },
+            "Product": {
+                "type": "object",
+                "required": [
+                    "id",
+                    "code",
+                    "name",
+                    "description",
+                    "price",
+                    "brand",
+                    "unit"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "bigint",
+                        "example": 5813462394903814041
+                    },
+                    "code": {
+                        "type": "bigint",
+                        "example": 3272473007460470887
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "string"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "string"
+                    },
+                    "price": {
+                        "type": "float",
+                        "example": 0.5
+                    },
+                    "brand": {
+                        "type": "string",
+                        "example": "string"
+                    },
+                    "unit": {
+                        "type": "string",
+                        "example": "string"
+                    },
+                    "created_at": {
+                        "type": "datetime",
+                        "example": "2022-04-13 12:44:43"
+                    },
+                    "updated_at": {
+                        "type": "datetime",
+                        "example": "2022-04-13 12:44:43"
+                    },
+                    "deleted_at": {
+                        "type": "datetime",
+                        "example": "2022-04-13 12:44:43"
+                    }
+                }
+            },
+            "User": {
+                "type": "object",
+                "required": [
+                    "id",
+                    "name",
+                    "email"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "bigint",
+                        "example": 8387520427793520722
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "string"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "string"
+                    },
+                    "email_verified_at": {
+                        "type": "datetime",
+                        "example": "2022-04-13 12:44:43"
+                    },
+                    "created_at": {
+                        "type": "datetime",
+                        "example": "2022-04-13 12:44:43"
+                    },
+                    "updated_at": {
+                        "type": "datetime",
+                        "example": "2022-04-13 12:44:43"
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}

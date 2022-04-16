@@ -4,24 +4,20 @@ namespace Tests\Feature;
 
 use App\Models\Customer;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class CustomerTest extends TestCase
 {
+    use WithFaker;
+
     public function authenticate()
     {
-        $user = [
-            'name' => 'Test',
-            'email' => ($email =
-                time() . mt_rand(0, 999) . 'test123@gmail.com'),
-            'password' => bcrypt('12345678'),
-        ];
-        User::create($user);
-        if (!auth()->attempt(['email' => $email, 'password' => '12345678'])) {
-            return response(['message' => 'Login credentials are invaild']);
-        }
+        $user = User::factory()->create();
+        auth()->attempt([
+            'email' => $user->email,
+            'password' => 'password',
+        ]);
         return $accessToken = auth()
             ->user()
             ->createToken('authToken')->accessToken;
@@ -30,16 +26,19 @@ class CustomerTest extends TestCase
     public function testCreateCustomer()
     {
         $count = Customer::count();
+        $customer = [
+            'phoneNumber' => $this->faker
+                ->unique()
+                ->numberBetween(10000000, 99999999),
+            'name' => $this->faker->name,
+            'email' => $this->faker->unique()->email,
+            'city' => $this->faker->city,
+            'address' => $this->faker->address,
+        ];
         $token = $this->authenticate();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->json('POST', '/customers', [
-            'phoneNumber' => mt_rand(10000000, 99999999),
-            'name' => 'Aouadi Adib',
-            'email' => time() . '@gmail.com',
-            'city' => 'Jendouba',
-            'address' => 'rue 01 bullaregia',
-        ]);
+        ])->json('POST', '/customers', $customer);
         $count++;
         $this->assertEquals($count, Customer::count());
         $response->assertStatus(201);
@@ -47,37 +46,70 @@ class CustomerTest extends TestCase
 
     public function testInvalidCreateCustomer()
     {
+        $firstCustomer = Customer::factory()->create();
         $customer = [
-            'phoneNumber' => random_int(10000000, 99999998),
-            'name' => 'Aouadi Adib',
-            'email' => time() . 'test@gmail.com',
-            'city' => 'Jendouba',
-            'address' => 'rue 01 bullaregia',
+            'phoneNumber' => $firstCustomer->phoneNumber,
+            'email' => $firstCustomer->email,
         ];
-        Customer::create($customer);
         $token = $this->authenticate();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->json('POST', '/customers', [$customer]);
+        ])->json('POST', '/customers', $customer);
         $response->assertStatus(422);
         $response->assertJsonStructure([
             'success',
-            'errors' => ['email', 'phoneNumber'],
+            'errors' => ['name', 'email', 'phoneNumber', 'address'],
         ]);
     }
 
-    public function updateCustomer(){
+    public function testUpdateCustomer()
+    {
+        $customer = Customer::factory()->create();
+        $newCustomer = [
+            'phoneNumber' => $this->faker
+                ->unique()
+                ->numberBetween(10000000, 99999999),
+            'name' => $this->faker->name,
+            'email' => $this->faker->unique()->email,
+            'city' => $this->faker->city,
+            'address' => $this->faker->address,
+        ];
         $token = $this->authenticate();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->json('POST', '/customers', [
-            'phoneNumber' => mt_rand(10000000, 99999999),
-            'name' => 'Aouadi Adib',
-            'email' => time() . '@gmail.com',
-            'city' => 'Jendouba',
-            'address' => 'rue 01 bullaregia',
-        ]);
+        ])->json('PUT', '/customers/' . $customer->id, $newCustomer);
         $response->assertStatus(200);
+        $response->assertExactJson([
+            'success' => true,
+            'message' => 'Customer updated successfully',
+            'data' => [
+                'id' => $customer->id,
+                'name' => $newCustomer['name'],
+                'email' => $newCustomer['email'],
+                'phoneNumber' => $newCustomer['phoneNumber'],
+                'city' => $newCustomer['city'],
+                'address' => $newCustomer['address'],
+            ],
+        ]);
+    }
+
+    public function testInvalidUpdateCustomer()
+    {
+        $firstCustomer = Customer::factory()->create();
+        $secondCustomer = Customer::factory()->create();
+        $customerData = [
+            'email' => $firstCustomer->email,
+            'phoneNumber' => $firstCustomer->phoneNumber,
+        ];
+        $token = $this->authenticate();
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->json('PUT', '/customers/' . $secondCustomer->id, $customerData);
+        $response->assertStatus(422);
+        $response->assertJsonStructure([
+            'success',
+            'errors' => ['name', 'email', 'phoneNumber', 'address'],
+        ]);
     }
 
     public function testListCustomer()
@@ -96,9 +128,9 @@ class CustomerTest extends TestCase
                     'email',
                     'phoneNumber',
                     'city',
-                    'address'
-                ]
-            ]
+                    'address',
+                ],
+            ],
         ]);
     }
 
@@ -143,5 +175,4 @@ class CustomerTest extends TestCase
         ])->json('DELETE', '/customers/0');
         $response->assertStatus(404);
     }
-
 }

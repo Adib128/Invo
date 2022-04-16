@@ -3,19 +3,22 @@
 namespace Tests\Feature;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class AuthTest extends TestCase
 {
+    use WithFaker;
+
     public function testRegister()
     {
-        $response = $this->json('POST', '/register', [
-            'name' => 'Test',
-            'email' => time() . 'test@gmail.com',
-            'password' => bcrypt('12345678'),
-        ]);
+        $user = [
+            'name' => $this->faker->name(),
+            'email' => $this->faker->unique()->safeEmail(),
+            'email_verified_at' => now(),
+            'password' => bcrypt('123456'),
+        ];
+        $response = $this->json('POST', '/register', $user);
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'success',
@@ -23,39 +26,42 @@ class AuthTest extends TestCase
         ]);
     }
 
-    public function testInvalidRegister(){
-        $user = User::select('*')->first();
+    public function testInvalidRegister()
+    {
+        $user = User::factory()->create();
         $response = $this->json('POST', '/register', [
-            'name' => 'Test',
             'email' => $user->email,
-            'password' => bcrypt('12345678'),
         ]);
         $response->assertStatus(422);
+        $response->assertJsonStructure([
+            'success',
+            'message',
+            'errors' => ['name', 'email', 'password'],
+        ]);
     }
 
-    public function testLogin(){
-        $password = '12345678';
-        User::create([
-            'name' => $name = 'Test',
-            'email' => $email = time() . '@gmail.com',
-            'password' => bcrypt($password),
-        ]);
-        $response = $this->json('POST', '/login', [
-            'email' => $email,
-            'password' => $password
-        ]);
+    public function testLogin()
+    {
+        $user = User::factory()->create();
+        $userData = [
+            'email' => $user->email,
+            'password' => 'password'
+        ];
+        $response = $this->json('POST', '/login', $userData);
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'success',
-            'data' => ['user', 'access_token']
+            'data' => ['user', 'access_token'],
         ]);
     }
 
-    public function testInvalidLogin(){
-        $response = $this->json('POST', '/login', [
-            'email' => 'aaa@gmail.com',
-            'password' => '12345678'
-        ]);
+    public function testInvalidLogin()
+    {
+        $userData = [
+            'email' => $this->faker->email,
+            'password' => $this->faker->password,
+        ];
+        $response = $this->json('POST', '/login', $userData);
         $response->assertStatus(401);
     }
 }

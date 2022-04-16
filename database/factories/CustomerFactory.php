@@ -16,7 +16,7 @@ class CustomerFactory extends Factory
         return [
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->email(),
-            'phoneNumber' => $this->faker->unique()->randomNumber(),
+            'phoneNumber' => $this->faker->unique()->numberBetween(10000000, 99999999),
             'city' => $this->faker->city(),
             'address' => $this->faker->address()
         ];

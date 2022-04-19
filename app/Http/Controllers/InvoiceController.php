@@ -46,6 +46,9 @@ class InvoiceController extends BaseController
     public function show($id)
     {
         $invoice = Invoice::find($id);
+         if (!$invoice) {
+            return $this->handleError('Invoice not found');
+        }
         return $this->handleResponse(new InvoiceResource($invoice));
     }
 

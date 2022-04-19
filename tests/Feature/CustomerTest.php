@@ -137,7 +137,7 @@ class CustomerTest extends TestCase
     public function testShowCustomer()
     {
         $token = $this->authenticate();
-        $customer = Customer::select('*')->first();
+        $customer = Customer::factory()->create();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
         ])->json('GET', '/customers/' . $customer->id);
@@ -147,7 +147,6 @@ class CustomerTest extends TestCase
     public function testInvalidShowCustomer()
     {
         $token = $this->authenticate();
-        $customer = Customer::select('*')->first();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
         ])->json('GET', '/customers/0');

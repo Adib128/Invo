@@ -14,10 +14,10 @@ class ProductFactory extends Factory
     public function definition()
     {
         return [
-            'code' => $this->faker->randomNumber(4),
+            'code' => $this->faker->unique()->randomNumber(4),
             'name' => $this->faker->name(),
             'description' => $this->faker->text(),
-            'price' => $this->faker->randomFloat(8, 2),
+            'price' => $this->faker->randomFloat(2, 0, 10000),
             'brand' => $this->faker->title(),
             'unit' => $this->faker->title(),
         ];

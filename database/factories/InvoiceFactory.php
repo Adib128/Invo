@@ -17,10 +17,10 @@ class InvoiceFactory extends Factory
         return [
             'reference' => $this->faker->randomNumber(),
             'dueDate' => $this->faker->date(),
-            'subTotal' => $this->faker->randomFloat(),
-            'tax' => $this->faker->randomFloat(),
+            'subTotal' => $this->faker->randomFloat(2, 0, 10000),
+            'tax' => $this->faker->randomFloat(2, 0, 10000),
             'discount' => $this->faker->randomNumber(),
-            'total' => $this->faker->randomFloat(),
+            'total' => $this->faker->randomFloat(2, 0, 10000),
             'customer_id' => Customer::factory(),
         ];
     }

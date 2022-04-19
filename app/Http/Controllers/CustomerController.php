@@ -21,7 +21,7 @@ class CustomerController extends BaseController
     public function index()
     {
         $customers = Customer::paginate(10);
-        return $this->handleResponse(CustomerResource::collection($customers));
+        return $this->handleResponse($customers);
     }
 
     /**

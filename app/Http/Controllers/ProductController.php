@@ -6,79 +6,39 @@ use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 
+/**
+ * @group Products
+ */
 class ProductController extends BaseController
 {
     /**
-     * Display a listing of the products.
+     * List products
      *
-     * @return \Illuminate\Http\Response
-     */
-    /**
-     * @OA\Get(
-     *     path="/products",
-     *     tags={"Product"},
-     *     description="Display a list products",
-     *     operationId="products",
-     *     @OA\Response(
-     *         response=200,
-     *         description="successful operation"
-     *     )
-     * )
+     * Get a paginated list of products.
+     *
+     * @authenticated
      */
     public function index()
     {
         $products = Product::paginate(10);
-        return $this->handleResponse(ProductResource::collection($products));
+        return $this->handleResponse($products);
     }
 
     /**
+     * Store product
+     *
      * Store a newly created product in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @bodyParam code int required
+     * @bodyParam name string required
+     * @bodyParam price int required
+     * @bodyParam brand string required
+     * @bodyParam unit string required
+     *
+     * @authenticated
+     *
+     * @param  App\Http\Requests\ProductRequest  $request
      * @return \Illuminate\Http\Response
-     */
-    /**
-     * @OA\Post(
-     *     path="/products",
-     *     tags={"Product"},
-     *     description="Store a newly created product in storage.",
-     *     operationId="storeProduct",
-     *     @OA\RequestBody(
-     *         @OA\MediaType(
-     *             mediaType="application/json",
-     *             @OA\Schema(
-     *                 @OA\Property(
-     *                     property="id",
-     *                     type="string"
-     *                 ),
-     *                 @OA\Property(
-     *                     property="name",
-     *                     type="string"
-     *                 ),
-     *                 @OA\Property(
-     *                     property="phone",
-     *                     oneOf={
-     *                     	   @OA\Schema(type="string"),
-     *                     	   @OA\Schema(type="integer"),
-     *                     }
-     *                 ),
-     *                 example={"id": "a3fb6", "name": "Jessica Smith", "phone": 12345678}
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="successful operation"
-     *     ),
-     *     @OA\Response(
-     *         response=422,
-     *         description="Invalid ID supplied"
-     *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="Order not found"
-     *     )
-     * )
      */
     public function store(ProductRequest $request)
     {
@@ -91,27 +51,16 @@ class ProductController extends BaseController
     }
 
     /**
+     * Show product
+     *
      * Display the specified product.
      *
-     * @param  \App\Models\Product  $product
+     * @pathParam product integer required
+     *
+     * @authenticated
+     *
+     * @param  int  $id
      * @return \Illuminate\Http\Response
-     */
-    /**
-     * @OA\Get(
-     *     path="/products/{id}",
-     *     tags={"Product"},
-     *     description="Display the specified product",
-     *     operationId="product",
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         required=true
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="successful operation"
-     *     )
-     * )
      */
     public function show($id)
     {
@@ -123,10 +72,21 @@ class ProductController extends BaseController
     }
 
     /**
-     * Update the specified resource in product.
+     * Update product
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Product  $product
+     * Update the specified product in storage.
+     *
+     * @pathParam product integer required
+     *
+     * @bodyParam code int required
+     * @bodyParam name string required
+     * @bodyParam price int required
+     * @bodyParam brand string required
+     * @bodyParam unit string required
+     *
+     * @authenticated
+     *
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(ProductRequest $request, $id)
@@ -144,27 +104,16 @@ class ProductController extends BaseController
     }
 
     /**
+     * Remove product
+     *
      * Remove the specified product from storage.
      *
-     * @param  \App\Models\Product  $product
+     * @pathParam product integer required
+     *
+     * @authenticated
+     *
+     * @param  int  $id
      * @return \Illuminate\Http\Response
-     */
-    /**
-     * @OA\Delete(
-     *     path="/products/{id}",
-     *     tags={"Product"},
-     *     description="Remove the specified product from storage.",
-     *     operationId="deleteProduct",
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         required=true
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="successful operation"
-     *     )
-     * )
      */
     public function destroy($id)
     {

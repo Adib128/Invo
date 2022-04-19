@@ -17,7 +17,7 @@ class InvoiceController extends BaseController
     public function index()
     {
         $invoices = Invoice::paginate(10);
-        return $this->handleResponse(InvoiceResource::collection($invoices));
+        return $this->handleResponse($invoices);
     }
 
     /**

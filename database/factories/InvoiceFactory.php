@@ -15,7 +15,7 @@ class InvoiceFactory extends Factory
     public function definition()
     {
         return [
-            'reference' => $this->faker->randomNumber(),
+            'reference' => $this->faker->unique()->randomNumber(),
             'dueDate' => $this->faker->date(),
             'subTotal' => $this->faker->randomFloat(2, 0, 10000),
             'tax' => $this->faker->randomFloat(2, 0, 10000),

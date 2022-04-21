@@ -28,10 +28,10 @@ class InvoiceRequest extends FormRequest
         $rules = [
             'reference' => 'required|unique:invoices',
             'dueDate' => 'required|date',
-            'subTotal' => 'required|integer',
-            'tax' => 'required|integer',
+            'subTotal' => 'required|numeric',
+            'tax' => 'required|numeric',
             'discount' => 'required|integer',
-            'total' => 'required|integer',
+            'total' => 'required|numeric',
             'customer_id' => 'required|exists:customers,id',
         ];
 

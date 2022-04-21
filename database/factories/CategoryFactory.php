@@ -2,10 +2,9 @@
 
 namespace Database\Factories;
 
-use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class ProductFactory extends Factory
+class CategoryFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,11 +16,7 @@ class ProductFactory extends Factory
         return [
             'code' => $this->faker->unique()->randomNumber(4),
             'name' => $this->faker->name(),
-            'description' => $this->faker->text(),
-            'price' => $this->faker->randomFloat(2, 0, 10000),
-            'brand' => $this->faker->title(),
-            'unit' => $this->faker->title(),
-            'category_id' => Category::factory()
+            'slug' => $this->faker->slug()
         ];
     }
 }

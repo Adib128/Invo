@@ -16,9 +16,14 @@ class Product extends Model
         'price',
         'brand',
         'unit',
+        'category_id'
     ];
 
     public function invoices(){
         return $this->belongsToMany(Invoice::class);
+    }
+
+    public function category(){
+        return $this->belongsTo(Category::class);
     }
 }

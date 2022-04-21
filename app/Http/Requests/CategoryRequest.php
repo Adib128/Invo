@@ -2,13 +2,11 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Product;
-use Illuminate\Contracts\Validation\Validator;
+use App\Models\Category;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Illuminate\Http\Exceptions\HttpResponseException;
 
-class ProductRequest extends FormRequest
+class CategoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,20 +25,19 @@ class ProductRequest extends FormRequest
      */
     public function rules()
     {
+        // Rules for create method
         $rules = [
-            'code' => 'required|unique:products',
+            'code' => 'required|integer|unique:categories',
             'name' => 'required',
-            'price' => 'required|numeric',
-            'brand' => 'required',
-            'unit' => 'required',
-            'category_id' => 'required|exists:categories,id',
+            'slug' => 'required',
         ];
 
+        // Rules for update method
         if (in_array($this->method(), ['PUT'])) {
-            $product = Product::find($this->route()->parameter('product'));
+            $category = Category::find($this->route()->parameter('category'));
             $rules['code'] = [
                 'required',
-                Rule::unique('products')->ignore($product),
+                Rule::unique('categories')->ignore($category),
             ];
         }
 

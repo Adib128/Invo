@@ -7,23 +7,46 @@ use App\Http\Resources\InvoiceResource;
 use App\Models\Invoice;
 use Illuminate\Http\Request;
 
+/**
+ * @group Invoices
+ */
 class InvoiceController extends BaseController
 {
     /**
-     * Display a listing of the invoices.
+     * List invoices
      *
-     * @return \Illuminate\Http\Response
+     * Get a paginated list of invoices.
+     *
+     * queryParam page int
+     * 
+     * @authenticated
      */
     public function index()
     {
         $invoices = Invoice::paginate(10);
-        return $this->handleResponse($invoices);
+        return response()->json([
+            'success' => true,
+            'current_page' => $invoices->currentPage(),
+            'data' => InvoiceResource::collection($invoices->items())
+        ]);
     }
 
     /**
+     * Store invoice
+     *
      * Store a newly created invoice in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @bodyParam reference int required
+     * @bodyParam dueDate date required
+     * @bodyParam subTotal int required
+     * @bodyParam tax int required
+     * @bodyParam discount int required
+     * @bodyParam total int required
+     * @bodyParam customer_id int required
+     *
+     * @authenticated
+     *
+     * @param  App\Http\Requests\InvoiceRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(InvoiceRequest $request)
@@ -38,7 +61,13 @@ class InvoiceController extends BaseController
     }
 
     /**
+     * Show invoice
+     *
      * Display the specified invoice.
+     *
+     * @pathParam invoice integer required
+     *
+     * @authenticated
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -53,13 +82,26 @@ class InvoiceController extends BaseController
     }
 
     /**
+     * Update invoice
+     *
      * Update the specified invoice in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @pathParam invoice integer required
+     *
+     * @bodyParam reference int required
+     * @bodyParam dueDate date required
+     * @bodyParam subTotal int required
+     * @bodyParam tax int required
+     * @bodyParam discount int required
+     * @bodyParam total int required
+     * @bodyParam customer_id int required
+     *
+     * @authenticated
+     *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(InvoiceRequest $request, $id)
     {
         $invoice = Invoice::find($id);
         if (!$invoice) {
@@ -73,7 +115,13 @@ class InvoiceController extends BaseController
     }
 
     /**
+     * Remove product
+     *
      * Remove the specified invoice from storage.
+     *
+     * @pathParam invoice integer required
+     *
+     * @authenticated
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -89,10 +137,15 @@ class InvoiceController extends BaseController
     }
 
     /**
-     * add products to invoice.
+     * Add invoice products
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * Store invoice products in storage.
+     *
+     * @bodyParam products [int] required
+     *
+     * @authenticated
+     *
+     * @param  App\Http\Requests\InvoiceRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function addProducts(Request $request, $id)
@@ -112,10 +165,15 @@ class InvoiceController extends BaseController
     }
 
     /**
-     * Remove products from invoice.
+     * Remove invoice products
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * Remove invoice products in storage.
+     *
+     * @bodyParam products array required
+     *
+     * @authenticated
+     *
+     * @param  App\Http\Requests\InvoiceRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function removeProducts(Request $request, $id)

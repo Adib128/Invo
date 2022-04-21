@@ -38,7 +38,7 @@ class CustomerTest extends TestCase
         $token = $this->authenticate();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->json('POST', '/customers', $customer);
+        ])->json('POST', '/api/customers', $customer);
         $count++;
         $this->assertEquals($count, Customer::count());
         $response->assertStatus(201);
@@ -54,7 +54,7 @@ class CustomerTest extends TestCase
         $token = $this->authenticate();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->json('POST', '/customers', $customer);
+        ])->json('POST', '/api/customers', $customer);
         $response->assertStatus(422);
         $response->assertJsonStructure([
             'success',
@@ -77,7 +77,7 @@ class CustomerTest extends TestCase
         $token = $this->authenticate();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->json('PUT', '/customers/' . $customer->id, $newCustomer);
+        ])->json('PUT', '/api/customers/' . $customer->id, $newCustomer);
         $response->assertStatus(200);
         $response->assertExactJson([
             'success' => true,
@@ -104,7 +104,7 @@ class CustomerTest extends TestCase
         $token = $this->authenticate();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->json('PUT', '/customers/' . $secondCustomer->id, $customerData);
+        ])->json('PUT', '/api/customers/' . $secondCustomer->id, $customerData);
         $response->assertStatus(422);
         $response->assertJsonStructure([
             'success',
@@ -117,10 +117,11 @@ class CustomerTest extends TestCase
         $token = $this->authenticate();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->json('GET', '/customers');
+        ])->json('GET', '/api/customers');
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'success',
+            'current_page',
             'data' => [
                 '*' => [
                     'id',
@@ -140,7 +141,7 @@ class CustomerTest extends TestCase
         $customer = Customer::factory()->create();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->json('GET', '/customers/' . $customer->id);
+        ])->json('GET', '/api/customers/' . $customer->id);
         $response->assertStatus(200);
     }
 
@@ -160,7 +161,7 @@ class CustomerTest extends TestCase
         $count = Customer::count();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->json('DELETE', '/customers/' . $customer->id);
+        ])->json('DELETE', '/api/customers/' . $customer->id);
         $response->assertStatus(200);
         $count--;
         $this->assertEquals($count, Customer::count());
@@ -171,7 +172,7 @@ class CustomerTest extends TestCase
         $token = $this->authenticate();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->json('DELETE', '/customers/0');
+        ])->json('DELETE', '/api/customers/0');
         $response->assertStatus(404);
     }
 }

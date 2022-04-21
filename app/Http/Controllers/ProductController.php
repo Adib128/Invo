@@ -21,7 +21,11 @@ class ProductController extends BaseController
     public function index()
     {
         $products = Product::paginate(10);
-        return $this->handleResponse($products);
+        return response()->json([
+            'success' => true,
+            'current_page' => $products->currentPage(),
+            'data' => ProductResource::collection($products->items())
+        ]);
     }
 
     /**

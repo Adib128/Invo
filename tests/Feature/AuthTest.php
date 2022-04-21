@@ -10,6 +10,7 @@ class AuthTest extends TestCase
 {
     use WithFaker;
 
+
     public function testRegister()
     {
         $user = [
@@ -18,7 +19,7 @@ class AuthTest extends TestCase
             'email_verified_at' => now(),
             'password' => bcrypt('123456'),
         ];
-        $response = $this->json('POST', '/register', $user);
+        $response = $this->json('POST', '/api/register', $user);
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'success',
@@ -29,7 +30,7 @@ class AuthTest extends TestCase
     public function testInvalidRegister()
     {
         $user = User::factory()->create();
-        $response = $this->json('POST', '/register', [
+        $response = $this->json('POST', '/api/register', [
             'email' => $user->email,
         ]);
         $response->assertStatus(422);
@@ -47,7 +48,7 @@ class AuthTest extends TestCase
             'email' => $user->email,
             'password' => 'password'
         ];
-        $response = $this->json('POST', '/login', $userData);
+        $response = $this->json('POST', '/api/login', $userData);
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'success',
@@ -61,7 +62,7 @@ class AuthTest extends TestCase
             'email' => $this->faker->email,
             'password' => $this->faker->password,
         ];
-        $response = $this->json('POST', '/login', $userData);
+        $response = $this->json('POST', '/api/login', $userData);
         $response->assertStatus(401);
     }
 }

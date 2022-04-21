@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -31,14 +32,15 @@ class ProductTest extends TestCase
             'code' => $this->faker->unique()->randomNumber(4),
             'name' => $this->faker->name(),
             'description' => $this->faker->text(),
-            'price' => 10.2,
+            'price' => $this->faker->randomFloat(2, 0, 10000),
             'brand' => $this->faker->title(),
             'unit' => $this->faker->title(),
+            'category_id' => Category::factory()->create()->id,
         ];
         $token = $this->authenticate();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->json('POST', '/products', $product);
+        ])->json('POST', '/api/products', $product);
         $count++;
         $this->assertEquals($count, Product::count());
         $response->assertStatus(201);
@@ -49,33 +51,46 @@ class ProductTest extends TestCase
         $firstProduct = Product::factory()->create();
         $product = [
             'code' => $firstProduct->code,
+            'category_id' => 0,
         ];
         $token = $this->authenticate();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->json('POST', '/products', $product);
+        ])->json('POST', '/api/products', $product);
         $response->assertStatus(422);
         $response->assertJsonStructure([
             'success',
-            'errors' => ['code', 'name', 'price', 'brand', 'unit'],
+            'errors' => [
+                'code',
+                'name',
+                'price', 
+                'brand',
+                'unit',
+                'category_id'
+            ]
+        ]);
+        $response->assertJsonFragment([
+            'category_id' => ['The selected category id is invalid.'],
         ]);
     }
 
     public function testUpdateProduct()
     {
         $product = Product::factory()->create();
+        $category = Category::factory()->create();
         $newProduct = [
             'code' => $this->faker->unique()->randomNumber(4),
             'name' => $this->faker->name(),
             'description' => $this->faker->text(),
-            'price' => 10.2,
+            'price' => $this->faker->randomFloat(2, 0, 10000),
             'brand' => $this->faker->title(),
             'unit' => $this->faker->title(),
+            'category_id' => $category->id
         ];
         $token = $this->authenticate();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->json('PUT', '/products/' . $product->id, $newProduct);
+        ])->json('PUT', '/api/products/' . $product->id, $newProduct);
         $response->assertStatus(200);
         $response->assertExactJson([
             'success' => true,
@@ -88,6 +103,10 @@ class ProductTest extends TestCase
                 'price' => $newProduct['price'],
                 'brand' => $newProduct['brand'],
                 'unit' => $newProduct['unit'],
+                'category' => [
+                    'id' => $category->id,
+                    'name' => $category->name
+                ],
             ],
         ]);
     }
@@ -97,16 +116,27 @@ class ProductTest extends TestCase
         $firstProduct = Product::factory()->create();
         $secondProduct = Product::factory()->create();
         $productData = [
-            'code' => $firstProduct->code
+            'code' => $firstProduct->code,
+            'category_id' => 0
         ];
         $token = $this->authenticate();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->json('PUT', '/products/' . $secondProduct->id, $productData);
+        ])->json('PUT', '/api/products/' . $secondProduct->id, $productData);
         $response->assertStatus(422);
         $response->assertJsonStructure([
             'success',
-            'errors' => ['code', 'name', 'price', 'brand', 'unit'],
+            'errors' => [
+                'code',
+                'name',
+                'price', 
+                'brand',
+                'unit',
+                'category_id'
+            ]
+        ]);
+        $response->assertJsonFragment([
+            'category_id' => ['The selected category id is invalid.'],
         ]);
     }
 
@@ -115,10 +145,11 @@ class ProductTest extends TestCase
         $token = $this->authenticate();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->json('GET', '/products');
+        ])->json('GET', '/api/products');
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'success',
+            'current_page',
             'data' => [
                 '*' => [
                     'id',
@@ -139,7 +170,7 @@ class ProductTest extends TestCase
         $product = Product::factory()->create();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->json('GET', '/products/' . $product->id);
+        ])->json('GET', '/api/products/' . $product->id);
         $response->assertStatus(200);
     }
 
@@ -148,7 +179,7 @@ class ProductTest extends TestCase
         $token = $this->authenticate();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->json('GET', '/products/0');
+        ])->json('GET', '/api/products/0');
         $response->assertStatus(404);
     }
 
@@ -159,7 +190,7 @@ class ProductTest extends TestCase
         $count = Product::count();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->json('DELETE', '/products/' . $product->id);
+        ])->json('DELETE', '/api/products/' . $product->id);
         $count--;
         $response->assertStatus(200);
         $this->assertEquals($count, Product::count());
@@ -170,7 +201,7 @@ class ProductTest extends TestCase
         $token = $this->authenticate();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->json('DELETE', '/products/0');
+        ])->json('DELETE', '/api/products/0');
         $response->assertStatus(404);
     }
 }

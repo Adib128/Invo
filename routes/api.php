@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProductController;
@@ -22,6 +23,8 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::get('/profile', [AuthController::class, 'profile'])->middleware('auth:api');
 
 Route::apiResource('/customers', CustomerController::class)->middleware('auth:api');
+
+Route::apiResource('/categories', CategoryController::class)->middleware('auth:api');
 
 Route::apiResource('/products', ProductController::class)->middleware('auth:api');
 

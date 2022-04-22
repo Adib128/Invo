@@ -12,18 +12,6 @@ class InvoiceTest extends TestCase
 {
     use WithFaker;
 
-    public function authenticate()
-    {
-        $user = User::factory()->create();
-        auth()->attempt([
-            'email' => $user->email,
-            'password' => 'password',
-        ]);
-        return $accessToken = auth()
-            ->user()
-            ->createToken('authToken')->accessToken;
-    }
-
     public function testListInvoice()
     {
         $token = $this->authenticate();
@@ -131,7 +119,7 @@ class InvoiceTest extends TestCase
     {
         $invoice = Invoice::factory()->create();
         $newInvoice = [
-            'reference' => 25 + $this->faker->unique()->randomNumber(),
+            'reference' => 33 + $this->faker->unique()->randomNumber(),
             'dueDate' => $this->faker->date(),
             'subTotal' => $this->faker->randomFloat(2, 0, 10000),
             'tax' => $this->faker->randomFloat(2, 0, 10000),

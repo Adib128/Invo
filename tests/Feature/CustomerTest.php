@@ -11,18 +11,6 @@ class CustomerTest extends TestCase
 {
     use WithFaker;
 
-    public function authenticate()
-    {
-        $user = User::factory()->create();
-        auth()->attempt([
-            'email' => $user->email,
-            'password' => 'password',
-        ]);
-        return $accessToken = auth()
-            ->user()
-            ->createToken('authToken')->accessToken;
-    }
-
     public function testCreateCustomer()
     {
         $count = Customer::count();

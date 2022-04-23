@@ -2,6 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Category;
+use App\Models\Customer;
+use App\Models\Product;
+use Artisan;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,6 +17,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        // Create passport key
+        Artisan::call('passport:install'); 
+
+        // Create customers
+        Customer::factory(10)->create();
+
+        // Create categories
+        Category::factory(10)->create();
+
+        // Create products
+        Product::factory(10)->create();
     }
 }

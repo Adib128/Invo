@@ -18,20 +18,27 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// User routes
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/register', [AuthController::class, 'register']);
-
 Route::get('/profile', [AuthController::class, 'profile'])->middleware('auth:api');
 Route::post('/change-password', [AuthController::class, 'changePassword'])->middleware('auth:api');
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:api');
 
+// Customer CRUD route
 Route::apiResource('/customers', CustomerController::class)->middleware('auth:api');
 
+// Category CRUD route
 Route::apiResource('/categories', CategoryController::class)->middleware('auth:api');
 
+// Product CRUD route
 Route::apiResource('/products', ProductController::class)->middleware('auth:api');
 
+// Invoices CRUD route
 Route::apiResource('/invoices', InvoiceController::class)->middleware('auth:api');
 
+// Add invoice products route
 Route::post('/invoices/{id}/products', [InvoiceController::class, 'addProducts'])->middleware('auth:api');
+
+// Remove invoice products route
 Route::delete('/invoices/{id}/products', [InvoiceController::class, 'removeProducts'])->middleware('auth:api');

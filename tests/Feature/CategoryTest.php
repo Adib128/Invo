@@ -220,7 +220,7 @@ class CategoryTest extends TestCase
     {
         // Get token
         $token = $this->authenticate();
-        // Send get request with invalid id
+        // Send delete request with invalid id
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
         ])->json('DELETE', '/api/categories/0');

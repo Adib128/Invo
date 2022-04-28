@@ -1,6 +1,6 @@
 
 # Invoice Management RESTful API
-It is a RESTful API for Invoice Management. This system enables the users to manage all the creating for customers the  selling invoices with products.
+It is a RESTful API for Invoice Management. This system enables the users to manage all the sell invoices.
 The system composed by:
 
 - Customer management
